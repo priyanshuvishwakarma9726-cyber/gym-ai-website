@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -11,6 +10,7 @@ import Planner from './pages/Planner';
 import AdminDashboard from './pages/AdminDashboard';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
+import AITrainingSession from './pages/AITrainingSession';
 import AdminRoute from './components/AdminRoute';
 import WhatsAppButton from './components/WhatsAppButton';
 import './index.css';
@@ -36,6 +36,8 @@ const Home = () => {
       .catch(err => setBackendStatus('Backend Offline'));
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <main style={{ padding: '4rem', maxWidth: '1200px', margin: '0 auto', marginTop: '6rem' }}>
       <h1 style={{ fontSize: '5rem', fontWeight: '800', marginBottom: '1.5rem', lineHeight: '1.1' }}>
@@ -48,7 +50,15 @@ const Home = () => {
       </p>
 
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <button className="btn-primary">Start Training</button>
+        <button
+          className="btn-primary"
+          onClick={() => navigate('/start')}
+          style={{
+            boxShadow: '0 0 20px var(--primary)',
+            animation: 'pulse 2s infinite'
+          }}>
+          Start Training
+        </button>
         <div className="glass-panel" style={{ padding: '0.8rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: isOnline ? '#0f0' : '#f00', display: 'inline-block', boxShadow: isOnline ? '0 0 10px #0f0' : 'none' }}></span>
           <span style={{ fontSize: '0.9rem', color: '#eee' }}>Status: {backendStatus}</span>
@@ -97,6 +107,7 @@ function App() {
             <Route path="/planner" element={<Planner />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/start" element={<AITrainingSession />} />
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
