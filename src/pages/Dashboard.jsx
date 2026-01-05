@@ -2,69 +2,123 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
-import ProgressTracker from '../components/ProgressTracker';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const { user } = useAuth();
-    const { xp, streak, water, sleep, logWater, logSleep } = useGame();
+    const { xp, streak, water, sleep } = useGame();
     const navigate = useNavigate();
 
     return (
-        <div className="app-shell" style={{ padding: '24px' }}>
-            {/* Header */}
-            <header style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+            {/* Header Area */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                 <div>
-                    <h1 style={{ fontSize: '1.8rem', marginBottom: '4px' }}>Hello, {user?.user_metadata?.display_name || 'Athlete'}</h1>
-                    <div style={{ color: 'var(--primary)', fontWeight: 700 }}>{xp} XP <span style={{ color: '#666', fontWeight: 400 }}>• Level {Math.floor(xp / 100) + 1}</span></div>
+                    <h1 style={{ marginBottom: '4px' }}>Dashboard Overview</h1>
+                    <p style={{ margin: 0 }}>Welcome back, {user?.user_metadata?.display_name || 'Admin'}. Here is what's happening today.</p>
                 </div>
-                <div onClick={() => navigate('/profile')} style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(45deg, var(--primary), var(--accent))', cursor: 'pointer' }}></div>
-            </header>
-
-            {/* Daily Motivation */}
-            <div className="card-premium" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(0,0,0,0))' }}>
-                <div style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', color: '#a78bfa' }}>Daily Focus</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 500, fontStyle: 'italic', lineHeight: 1.4 }}>"The only bad workout is the one that didn't happen."</div>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid-2" style={{ marginBottom: '24px' }}>
-                <div className="card-premium" style={{ border: '1px solid #4ade80' }}>
-                    <div style={{ fontSize: '2rem', fontWeight: 800 }}>{streak} <span style={{ fontSize: '1rem', fontWeight: 500 }}>Days</span></div>
-                    <div style={{ fontSize: '0.85rem', color: '#4ade80' }}>🔥 Streak</div>
-                </div>
-                <div className="card-premium" onClick={() => navigate('/workout')} style={{ cursor: 'pointer', border: '1px solid var(--primary)', background: 'rgba(124, 58, 237, 0.1)' }}>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '4px' }}>Start</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 600 }}>Quick Session →</div>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <button className="btn-saas-secondary">All Reports</button>
+                    <button className="btn-saas-primary" onClick={() => navigate('/start')}>+ New Plan</button>
                 </div>
             </div>
 
-            {/* Trackers */}
-            <div className="grid-2" style={{ marginBottom: '32px' }}>
-                <div className="card-premium" onClick={logWater} style={{ cursor: 'pointer', textAlign: 'center' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '8px' }}>💧</div>
-                    <div style={{ fontWeight: 700, fontSize: '1.2rem' }}>{water} <span style={{ fontSize: '0.9rem', fontWeight: 400 }}>Glasses</span></div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Tap to log</div>
-                </div>
-                <div className="card-premium" onClick={logSleep} style={{ cursor: 'pointer', textAlign: 'center' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '8px' }}>😴</div>
-                    <div style={{ fontWeight: 700, fontSize: '1.2rem' }}>{sleep}h <span style={{ fontSize: '0.9rem', fontWeight: 400 }}>Sleep</span></div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Tap to edit</div>
-                </div>
+            {/* KPI Cards */}
+            <div className="grid-4" style={{ marginBottom: '24px' }}>
+                <KPICard title="Total XP" value={xp.toLocaleString()} change="+12% vs last week" />
+                <KPICard title="Active Streak" value={`${streak} Days`} change="Keep it up!" />
+                <KPICard title="Avg Sleep" value={`${sleep} hrs`} change="-1hr vs target" negative />
+                <KPICard title="Hydration" value={`${water} Glasses`} change="On track" />
             </div>
 
-            {/* Progress Section */}
-            <section style={{ marginBottom: '100px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <h2 style={{ fontSize: '1.2rem' }}>Body Stats</h2>
-                    <button onClick={() => navigate('/planner')} className="btn-ghost" style={{ width: 'auto', padding: '6px 12px', fontSize: '0.8rem' }}>Update</button>
+            {/* Main Content Areas */}
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+
+                {/* Left Column: Recent Activity / Plan */}
+                <div>
+                    <div className="card-saas">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                            <h3>Current Active Plan: Hypertrophy Phase 1</h3>
+                            <span style={{ color: 'var(--primary)', fontSize: '0.9rem', cursor: 'pointer' }}>View Full Plan</span>
+                        </div>
+                        <table className="saas-table">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Focus</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Monday</td>
+                                    <td>Chest & Triceps</td>
+                                    <td><span style={{ padding: '4px 8px', background: '#dcfce7', color: '#166534', borderRadius: '12px', fontSize: '0.8rem' }}>Complete</span></td>
+                                    <td><button style={{ border: 'none', background: 'none', color: '#6b7280', cursor: 'pointer' }}>...</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Tuesday</td>
+                                    <td>Back & Biceps</td>
+                                    <td><span style={{ padding: '4px 8px', background: '#fef3c7', color: '#92400e', borderRadius: '12px', fontSize: '0.8rem' }}>Pending</span></td>
+                                    <td><button className="btn-saas-primary" style={{ padding: '4px 12px', fontSize: '0.8rem' }} onClick={() => navigate('/workout')}>Start</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Wednesday</td>
+                                    <td>Rest & Recovery</td>
+                                    <td><span style={{ padding: '4px 8px', background: '#f3f4f6', color: '#374151', borderRadius: '12px', fontSize: '0.8rem' }}>Scheduled</span></td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="card-saas">
+                        <h3>Weekly Analytics</h3>
+                        <div style={{ height: '200px', background: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', border: '1px dashed #d1d5db', borderRadius: '6px' }}>
+                            Chart Placeholder (Recharts Integration Ready)
+                        </div>
+                    </div>
                 </div>
-                <div className="card-premium" style={{ padding: '0', overflow: 'hidden' }}>
-                    <ProgressTracker />
+
+                {/* Right Column: Insights & Quick Actions */}
+                <div>
+                    <div className="card-saas">
+                        <h3>AI Insights</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div style={{ padding: '12px', background: '#eff6ff', borderRadius: '6px', borderLeft: '4px solid var(--primary)' }}>
+                                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#1e3a8a', marginBottom: '4px' }}>Increase Protein</div>
+                                <div style={{ fontSize: '0.85rem', color: '#1e40af' }}>Your recovery score is low. Try adding 20g protein post-workout.</div>
+                            </div>
+                            <div style={{ padding: '12px', background: '#f0fdf4', borderRadius: '6px', borderLeft: '4px solid var(--accent)' }}>
+                                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#14532d', marginBottom: '4px' }}>Great Consistency</div>
+                                <div style={{ fontSize: '0.85rem', color: '#166534' }}>You've hit the gym 3 days in a row. Momentum is building!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card-saas">
+                        <h3>Quick Actions</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <button className="btn-saas-secondary" style={{ width: '100%', textAlign: 'left' }}>📅 Log Body Weight</button>
+                            <button className="btn-saas-secondary" style={{ width: '100%', textAlign: 'left' }}>🥗 Log Meal</button>
+                            <button className="btn-saas-secondary" style={{ width: '100%', textAlign: 'left' }}>🔔 Update Reminders</button>
+                        </div>
+                    </div>
                 </div>
-            </section>
+
+            </div>
         </div>
     );
 };
+
+const KPICard = ({ title, value, change, negative }) => (
+    <div className="card-saas" style={{ marginBottom: 0 }}>
+        <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '8px' }}>{title}</div>
+        <div style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '8px' }}>{value}</div>
+        <div style={{ fontSize: '0.85rem', color: negative ? '#ef4444' : 'var(--accent)', fontWeight: 500 }}>{change}</div>
+    </div>
+);
+
 
 export default Dashboard;

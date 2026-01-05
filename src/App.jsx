@@ -89,34 +89,46 @@ const FeatureCard = ({ icon, title, desc }) => (
 import Workout from './pages/Workout';
 import Challenges from './pages/Challenges';
 import Profile from './pages/Profile';
+import Sidebar from './components/Sidebar';
 import { GameProvider } from './context/GameContext';
+import { useAuth } from './context/AuthContext';
 
 // ... (keep Home component same)
+
+// Helper Component to handle conditional Sidebar and Layout
+const Layout = ({ children }) => {
+  const { user } = useAuth();
+  return (
+    <div className="dashboard-layout">
+      {user && <Sidebar />}
+      <div style={{ flex: 1, marginLeft: user ? 'var(--sidebar-width)' : 0 }}>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <GameProvider>
-          <div style={{ minHeight: '100vh', position: 'relative' }}>
-            <Navbar />
+          <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-              <Route path="/planner" element={<Planner />} />
+              <Route path="/dashboard" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Dashboard /></div></ProtectedRoute>} />
+              <Route path="/planner" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Planner /></div></ProtectedRoute>} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-              <Route path="/start" element={<AITrainingSession />} />
-              <Route path="/workout" element={<Workout />} />
-              <Route path="/challenges" element={<Challenges />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/admin" element={<AdminRoute><div className="main-content" style={{ margin: 0 }}><AdminDashboard /></div></AdminRoute>} />
+              <Route path="/start" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><AITrainingSession /></div></ProtectedRoute>} />
+              <Route path="/workout" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Workout /></div></ProtectedRoute>} />
+              <Route path="/challenges" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Challenges /></div></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Profile /></div></ProtectedRoute>} />
             </Routes>
-            <MobileNav />
-            <WhatsAppButton />
-          </div>
+          </Layout>
         </GameProvider>
       </AuthProvider>
     </Router>
