@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const DietPlanner = () => {
     const [formData, setFormData] = useState({
@@ -19,7 +20,6 @@ const DietPlanner = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            // Use Vercel Serverless Function endpoint
             const res = await fetch('/api/diet', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -34,75 +34,79 @@ const DietPlanner = () => {
     };
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', color: 'white' }}>
-            {/* Form Section */}
-            <div className="glass-panel" style={{ padding: '2rem' }}>
-                <h3 style={{ marginBottom: '1.5rem', color: 'var(--primary)' }}>Diet Preferences</h3>
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'grid', gap: '24px' }}>
+            {/* Input Card */}
+            <div className="card-premium">
+                <h3 style={{ marginBottom: '20px', color: 'var(--accent)' }}>Nutrition Parameters</h3>
+                <form onSubmit={handleSubmit} className="stack-gap">
                     <div>
-                        <label>Current Goal</label>
-                        <select name="goal" value={formData.goal} onChange={handleChange}
-                            style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: '#333', border: 'none', color: 'white' }}>
+                        <label className="text-label">Goal</label>
+                        <select name="goal" className="input-field" value={formData.goal} onChange={handleChange}>
                             <option value="fat loss">Fat Loss</option>
                             <option value="muscle gain">Muscle Gain</option>
                             <option value="maintenance">Maintenance</option>
                         </select>
                     </div>
-                    <div>
-                        <label>Current BMI (optional for calorie tuning)</label>
-                        <input name="bmi" type="number" step="0.1" value={formData.bmi} onChange={handleChange} placeholder="e.g. 24.5"
-                            style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white' }} />
+
+                    <div className="grid-2">
+                        <div>
+                            <label className="text-label">BMI (Optional)</label>
+                            <input name="bmi" type="number" step="0.1" className="input-field" placeholder="e.g. 22.5" value={formData.bmi} onChange={handleChange} />
+                        </div>
+                        <div>
+                            <label className="text-label">Preference</label>
+                            <select name="preference" className="input-field" value={formData.preference} onChange={handleChange}>
+                                <option value="veg">Vegetarian</option>
+                                <option value="non-veg">Non-Veg</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div>
-                        <label>Food Preference</label>
-                        <select name="preference" value={formData.preference} onChange={handleChange}
-                            style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: '#333', border: 'none', color: 'white' }}>
-                            <option value="veg">Vegetarian</option>
-                            <option value="non-veg">Non-Vegetarian</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Meals Per Day</label>
-                        <select name="mealsPerDay" value={formData.mealsPerDay} onChange={handleChange}
-                            style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: '#333', border: 'none', color: 'white' }}>
+                        <label className="text-label">Meals Per Day</label>
+                        <select name="mealsPerDay" className="input-field" value={formData.mealsPerDay} onChange={handleChange}>
                             <option value="3">3 Meals</option>
-                            <option value="4">4 Meals (incl. snack)</option>
-                            <option value="5">5 Meals (incl. 2 snacks)</option>
+                            <option value="4">4 Meals (+ Snack)</option>
+                            <option value="5">5 Meals (+ 2 Snacks)</option>
                         </select>
                     </div>
 
-                    <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: '1rem' }}>
-                        {loading ? 'Generating...' : 'Generate Diet'}
+                    <button type="submit" className="btn-hero" disabled={loading} style={{ marginTop: '10px' }}>
+                        {loading ? 'Generating Diet...' : 'Design Nutrition Plan'}
                     </button>
                 </form>
             </div>
 
-            {/* Results Section */}
-            <div>
-                {plan ? (
-                    <div className="glass-panel" style={{ padding: '2rem', height: '100%', overflowY: 'auto' }}>
-                        <h3 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Your Diet Plan</h3>
-                        <p style={{ marginBottom: '1.5rem', fontSize: '0.9rem' }}>{plan.summary}</p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {plan.meals.map((meal, idx) => (
-                                <div key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem' }}>
-                                    <h4 style={{ color: '#fff' }}>{meal.meal}</h4>
-                                    <div style={{ paddingLeft: '0rem', marginTop: '0.5rem', color: '#ccc', display: 'flex', justifyContent: 'space-between' }}>
-                                        <span style={{ fontWeight: '600', color: 'white' }}>{meal.name}</span>
-                                        <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px' }}>
-                                            {meal.calories} kcal / {meal.protein} protein
-                                        </span>
-                                    </div>
+            {/* Results Card */}
+            {plan && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-premium" style={{ border: '1px solid var(--accent)' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                        <div className="text-label" style={{ color: 'var(--accent)' }}>RECOMMENDED PLAN</div>
+                        <h2 style={{ fontSize: '1.8rem', lineHeight: 1.2 }}>{plan.summary}</h2>
+                    </div>
+
+                    <div className="stack-gap">
+                        {plan.meals.map((meal, idx) => (
+                            <div key={idx} style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                padding: '16px', borderRadius: '16px',
+                                display: 'flex', alignItems: 'center', gap: '16px'
+                            }}>
+                                <div style={{
+                                    width: '40px', height: '40px', borderRadius: '12px',
+                                    background: 'rgba(6, 182, 212, 0.2)', color: 'var(--accent)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700
+                                }}>{idx + 1}</div>
+                                <div>
+                                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>{meal.meal}</div>
+                                    <div style={{ fontSize: '1.1rem', fontWeight: 600 }}>{meal.name}</div>
+                                    <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '4px' }}>{meal.calories} kcal • {meal.protein} protein</div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
-                ) : (
-                    <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '16px' }}>
-                        <p style={{ color: '#666' }}>Diet plan will appear here...</p>
-                    </div>
-                )}
-            </div>
+                </motion.div>
+            )}
         </div>
     );
 };

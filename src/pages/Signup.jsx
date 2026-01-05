@@ -4,14 +4,14 @@ import AuthForm from '../components/AuthForm';
 
 const Signup = () => {
     return (
-        <div style={{
-            minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '20px'
+        <div className="app-shell" style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '24px'
         }}>
             <div style={{ width: '100%', maxWidth: '400px' }}>
-                <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                    <h1 style={{ fontSize: '2rem' }}>Join Gym AI</h1>
-                    <p>Start your transformation journey today. 100% Free.</p>
+                <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                    <h1 style={{ fontSize: '2.5rem', marginBottom: '8px' }}>Join Gym AI</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>Start your transformation journey today. 100% Free.</p>
                 </div>
                 <AuthForm type="signup" />
             </div>

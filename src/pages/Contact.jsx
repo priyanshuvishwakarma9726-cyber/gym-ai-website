@@ -1,48 +1,45 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const Contact = () => {
     return (
-        <div style={{ padding: '4rem', maxWidth: '1200px', margin: '0 auto', color: 'white' }}>
-            <h1 style={{ textAlign: 'center', marginBottom: '3rem' }}>Contact Us</h1>
+        <div className="app-shell" style={{ padding: '24px' }}>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
-                {/* Contact Info */}
-                <div className="glass-panel" style={{ padding: '2rem' }}>
-                    <h3 style={{ color: 'var(--primary)', marginBottom: '1.5rem' }}>Get in Touch</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        <div>
-                            <h4 style={{ marginBottom: '0.5rem' }}>Address</h4>
-                            <p style={{ color: '#ccc' }}>123 Fitness Street, Muscle City, GYM 400001</p>
+                <h1 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>Get in Touch</h1>
+                <p style={{ marginBottom: '40px' }}>We're here to help you crush your fitness goals.</p>
+
+                <div className="stack-gap">
+                    <div className="card-premium">
+                        <h3 style={{ marginBottom: '8px' }}>Chat Support</h3>
+                        <p style={{ marginBottom: '16px', fontSize: '0.9rem' }}>Instant AI answers or talk to a human.</p>
+                        <button className="btn-ghost" style={{ border: '1px solid var(--primary)', color: 'white' }}>Start Live Chat</button>
+                    </div>
+
+                    <div className="card-premium">
+                        <h3 style={{ marginBottom: '8px' }}>Visit Our Studio</h3>
+                        <p style={{ marginBottom: '16px', fontSize: '0.9rem' }}>Come train with us in person.</p>
+                        <div style={{ borderRadius: '16px', overflow: 'hidden', height: '200px', background: '#222' }}>
+                            <iframe
+                                title="map"
+                                width="100%"
+                                height="100%"
+                                frameBorder="0"
+                                style={{ border: 0, opacity: 0.8 }}
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5927552591607!2d77.5945627!3d12.9715987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1647849284242!5m2!1sen!2sin"
+                                allowFullScreen
+                            ></iframe>
                         </div>
-                        <div>
-                            <h4 style={{ marginBottom: '0.5rem' }}>Phone</h4>
-                            <p style={{ color: '#ccc' }}>+91 99999 99999</p>
-                        </div>
-                        <div>
-                            <h4 style={{ marginBottom: '0.5rem' }}>Email</h4>
-                            <p style={{ color: '#ccc' }}>support@gymai.com</p>
-                        </div>
-                        <div>
-                            <h4 style={{ marginBottom: '0.5rem' }}>Hours</h4>
-                            <p style={{ color: '#ccc' }}>Mon - Sat: 5:00 AM - 11:00 PM</p>
-                            <p style={{ color: '#ccc' }}>Sun: 6:00 AM - 8:00 PM</p>
-                        </div>
+                    </div>
+
+                    <div className="card-premium">
+                        <h3 style={{ marginBottom: '8px' }}>Email Us</h3>
+                        <a href="mailto:support@gymai.com" style={{ color: 'var(--primary)', textDecoration: 'none', fontSize: '1.1rem', fontWeight: 600 }}>support@gymai.com</a>
                     </div>
                 </div>
 
-                {/* Map */}
-                <div className="glass-panel" style={{ padding: '1rem', height: '400px' }}>
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.966033481486!2d77.0266383150821!3d28.42826248249875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d19d582e38859%3A0x2cf5fe8e5c64b1e!2sCyber%20Hub!5e0!3m2!1sen!2sin!4v1625292723321!5m2!1sen!2sin"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0, borderRadius: '8px' }}
-                        allowFullScreen=""
-                        loading="lazy">
-                    </iframe>
-                </div>
-            </div>
+            </motion.div>
         </div>
     );
 };

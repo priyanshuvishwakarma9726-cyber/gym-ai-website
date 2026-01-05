@@ -1,22 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Premium Dark Theme Palette */
-  --bg-dark: #050507;
-  --bg-gradient: linear-gradient(180deg, #0f172a 0%, #000000 100%);
-  --primary: #8b5cf6;
-  /* Violet */
-  --primary-glow: rgba(139, 92, 246, 0.5);
-  --accent: #22d3ee;
-  /* Cyan */
-  --surface: rgba(255, 255, 255, 0.03);
-  --surface-border: rgba(255, 255, 255, 0.08);
-  --text-main: #ffffff;
-  --text-muted: #94a3b8;
+  /* Ultra-Premium Dark Theme */
+  --bg-deep: #000000;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #1a1b2e 0%, #000000 70%);
 
-  --radius-lg: 24px;
-  --radius-md: 16px;
-  --radius-sm: 8px;
+  /* Brand Colors - "Electric Violet" */
+  --primary: #7c3aed;
+  --primary-light: #a78bfa;
+  --primary-glow: rgba(124, 58, 237, 0.6);
+  --accent: #06b6d4;
+  /* Cyan */
+
+  /* Surfaces */
+  --surface-1: rgba(255, 255, 255, 0.03);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.15);
+
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-dim: #475569;
+
+  /* Spacing & Radius */
+  --radius-xl: 32px;
+  --radius-lg: 20px;
+  --tab-height: 60px;
 }
 
 * {
@@ -28,152 +38,168 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Outfit', sans-serif;
-  background: var(--bg-dark);
-  /* Fallback */
+  background-color: var(--bg-deep);
   background-image: var(--bg-gradient);
   background-attachment: fixed;
-  color: var(--text-main);
+  color: var(--text-primary);
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Core Components --- */
+
+/* 1. App Container (Mobile Constraint) */
+.app-shell {
+  width: 100%;
+  max-width: 600px;
+  /* Tablet-ish max width for center focus */
+  margin: 0 auto;
   min-height: 100vh;
+  position: relative;
   overflow-x: hidden;
+  padding-bottom: 100px;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  margin: 0;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-p {
-  margin: 0;
-  line-height: 1.6;
-  color: var(--text-muted);
-}
-
-/* --- Utility Classes --- */
-
-/* Glassmorphism Card */
-.glass-card {
-  background: var(--surface);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--surface-border);
+/* 2. Glass Card - The building block */
+.card-premium {
+  background: var(--surface-1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 24px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.glass-card:active {
+.card-premium:active {
   transform: scale(0.98);
 }
 
-/* Buttons */
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary), #7c3aed);
+/* 3. Primary Action Button */
+.btn-hero {
+  background: linear-gradient(135deg, var(--primary), #6d28d9);
   color: white;
   border: none;
-  border-radius: 50px;
-  padding: 16px 32px;
-  font-size: 1rem;
+  border-radius: var(--radius-xl);
+  padding: 18px 32px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: 0 8px 32px var(--primary-glow);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn-hero:hover::after {
+  opacity: 1;
+}
+
+.btn-hero:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 16px var(--primary-glow);
+}
+
+/* 4. Secondary/Ghost Buttons */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: 14px 24px;
+  border-radius: var(--radius-lg);
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 20px var(--primary-glow);
-  transition: all 0.3s ease;
   width: 100%;
-  /* Mobile default */
-  text-align: center;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
+  transition: all 0.2s;
 }
 
-.btn-primary:active {
-  transform: scale(0.95);
-  opacity: 0.9;
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
+.btn-ghost:active,
+.btn-ghost.active {
+  background: var(--surface-2);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50px;
-  padding: 14px 28px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  width: 100%;
-  transition: background 0.2s;
-}
-
-.btn-secondary:active {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* Inputs */
-input,
-select,
-textarea {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  color: white;
-  font-family: inherit;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-input:focus,
-select:focus {
   border-color: var(--primary);
 }
 
-/* Layout Grid */
-.page-container {
-  padding: 20px;
-  max-width: 500px;
-  /* Mobile focused max width for content */
-  margin: 0 auto;
-  padding-bottom: 80px;
-  /* Space for bottom nav or actions */
+/* 5. Inputs */
+.input-field {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 1rem;
+  color: white;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.3s;
 }
 
-@media (min-width: 768px) {
-  .page-container {
-    max-width: 1000px;
-    padding: 40px;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    width: auto;
-  }
+.input-field:focus {
+  border-color: var(--primary);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+/* 6. Typography Helpers */
+.text-gradient {
+  background: linear-gradient(to right, #fff, var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 7. Grid Layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stack-gap {
+  display: flex;
+  flexDirection: column;
+  gap: 16px;
+}
+
+/* 8. Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0);
   }
 
-  to {
-    opacity: 1;
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
     transform: translateY(0);
   }
 }
 
-.fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.anim-float {
+  animation: float 6s ease-in-out infinite;
 }

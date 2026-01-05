@@ -39,26 +39,34 @@ const AuthForm = ({ type }) => {
     };
 
     return (
-        <div className="glass-card">
-            {error && <div style={{ color: '#ff4444', marginBottom: '1rem', background: 'rgba(255,0,0,0.1)', padding: '10px', borderRadius: '8px' }}>{error}</div>}
-            {msg && <div style={{ color: '#44ff44', marginBottom: '1rem' }}>{msg}</div>}
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <input
-                    type="email"
-                    placeholder="Email Address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit" className="btn-primary" style={{ marginTop: '1rem' }}>
-                    {type === 'login' ? 'Login' : 'Creae Account'}
+        <div className="card-premium">
+            {error && <div style={{ color: '#ef4444', marginBottom: '16px', background: 'rgba(239, 68, 68, 0.1)', padding: '12px', borderRadius: '12px', fontSize: '0.9rem' }}>{error}</div>}
+            {msg && <div style={{ color: '#4ade80', marginBottom: '16px' }}>{msg}</div>}
+            <form onSubmit={handleSubmit} className="stack-gap" style={{ gap: '20px' }}>
+                <div>
+                    <label className="text-label">Email Address</label>
+                    <input
+                        className="input-field"
+                        type="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label className="text-label">Password</label>
+                    <input
+                        className="input-field"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit" className="btn-hero" style={{ marginTop: '10px' }}>
+                    {type === 'login' ? 'Login' : 'Create Account'}
                 </button>
             </form>
         </div>

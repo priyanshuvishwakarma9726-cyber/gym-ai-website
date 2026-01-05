@@ -21,43 +21,43 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <main className="page-container" style={{ paddingBottom: '120px', textAlign: 'center' }}>
+    <main className="app-shell" style={{ paddingBottom: '120px', textAlign: 'center' }}>
 
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-        style={{ marginTop: '4rem', marginBottom: '4rem' }}>
+        style={{ marginTop: '4rem', marginBottom: '4rem', padding: '0 20px' }}>
 
         <div style={{
           display: 'inline-block', padding: '6px 12px', borderRadius: '20px',
-          background: 'rgba(139, 92, 246, 0.1)', color: 'var(--primary)',
-          fontSize: '0.8rem', fontWeight: 600, marginBottom: '20px'
+          background: 'rgba(124, 58, 237, 0.15)', color: 'var(--primary-light)',
+          fontSize: '0.8rem', fontWeight: 600, marginBottom: '20px', border: '1px solid rgba(124, 58, 237, 0.3)'
         }}>
-          ✨ V 2.0 IS LIVE
+          V 2.0 LIVE
         </div>
 
-        <h1 style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: 1.1, marginBottom: '24px' }}>
+        <h1 style={{ fontSize: 'clamp(3rem, 12vw, 4.5rem)', lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-2px' }}>
           TRAIN <span className="text-gradient">SMARTER.</span>
         </h1>
 
-        <p style={{ fontSize: '1.1rem', maxWidth: '400px', margin: '0 auto 40px auto' }}>
+        <p style={{ fontSize: '1.1rem', maxWidth: '400px', margin: '0 auto 40px auto', color: 'var(--text-secondary)' }}>
           The world's first <span style={{ color: 'white' }}>100% Free AI Trainer</span>.
           Generate professional workout & diet plans in seconds.
         </p>
 
         <div style={{ maxWidth: '300px', margin: '0 auto' }}>
           <button
-            className="btn-primary"
+            className="btn-hero"
             onClick={() => navigate('/start')}
-            style={{ padding: '20px', fontSize: '1.2rem', boxShadow: '0 10px 30px rgba(139, 92, 246, 0.3)' }}>
+            style={{ padding: '20px', fontSize: '1.2rem' }}>
             Start AI Session
           </button>
-          <p style={{ fontSize: '0.8rem', marginTop: '16px', color: '#666' }}>No credit card required</p>
+          <p style={{ fontSize: '0.8rem', marginTop: '16px', color: 'var(--text-dim)' }}>No credit card required</p>
         </div>
       </motion.div>
 
       {/* Feature Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', textAlign: 'left' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', textAlign: 'left', padding: '0 20px' }}>
         <FeatureCard
           icon="⚡️" title="Instant Plans"
           desc="Get a full weekly routine in under 60 seconds based on your goal."
@@ -77,10 +77,10 @@ const Home = () => {
 };
 
 const FeatureCard = ({ icon, title, desc }) => (
-  <div className="glass-card">
-    <div style={{ fontSize: '2rem', marginBottom: '10px' }}>{icon}</div>
-    <h3 style={{ fontSize: '1.2rem', marginBottom: '8px', color: 'white' }}>{title}</h3>
-    <p style={{ fontSize: '0.9rem' }}>{desc}</p>
+  <div className="card-premium">
+    <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{icon}</div>
+    <h3 style={{ fontSize: '1.3rem', marginBottom: '8px', color: 'white' }}>{title}</h3>
+    <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>{desc}</p>
   </div>
 );
 

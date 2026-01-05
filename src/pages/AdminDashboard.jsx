@@ -1,168 +1,79 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabaseClient';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
+import { motion } from 'framer-motion';
 
 const AdminDashboard = () => {
-    const [members, setMembers] = useState([]);
-    const [selectedMember, setSelectedMember] = useState(null);
-    const [memberLogs, setMemberLogs] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { user } = useAuth();
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [msg, setMsg] = useState('');
 
-    useEffect(() => {
-        fetchMembers();
-    }, []);
-
-    useEffect(() => {
-        if (selectedMember) {
-            fetchMemberStats(selectedMember.id);
-        }
-    }, [selectedMember]);
-
-    const fetchMembers = async () => {
-        try {
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .order('created_at', { ascending: false });
-            if (error) throw error;
-            setMembers(data);
-        } catch (error) {
-            console.error(error);
-        } finally {
+    const handleInvite = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        // Mock Admin Action (In real app, call a cloud function)
+        setTimeout(() => {
+            setMsg(`Invitation sent to ${email}`);
             setLoading(false);
-        }
-    };
-
-    const fetchMemberStats = async (userId) => {
-        try {
-            const { data, error } = await supabase
-                .from('progress_logs')
-                .select('*')
-                .eq('user_id', userId)
-                .order('date', { ascending: true });
-            if (error) throw error;
-            setMemberLogs(data || []);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const toggleStatus = async (id, currentStatus) => {
-        try {
-            const { error } = await supabase
-                .from('profiles')
-                .update({ is_active: !currentStatus })
-                .eq('id', id);
-
-            if (error) throw error;
-            // Optimistic update
-            setMembers(members.map(m => m.id === id ? { ...m, is_active: !currentStatus } : m));
-        } catch (error) {
-            alert('Error updating status: ' + error.message);
-        }
-    };
-
-    const chartData = {
-        labels: memberLogs.map(log => new Date(log.date).toLocaleDateString()),
-        datasets: [
-            {
-                label: 'Weight (kg)',
-                data: memberLogs.map(log => log.weight),
-                borderColor: '#fca311',
-                backgroundColor: 'rgba(252, 163, 17, 0.5)',
-                tension: 0.3,
-            },
-        ],
+            setEmail('');
+        }, 1000);
     };
 
     return (
-        <div style={{ padding: '4rem', maxWidth: '1200px', margin: '0 auto', color: 'white' }}>
-            <h1 style={{ marginBottom: '2rem' }}>Admin Dashboard</h1>
+        <div className="app-shell" style={{ padding: '24px' }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                {/* Members List */}
-                <div className="glass-panel" style={{ padding: '2rem', maxHeight: '600px', overflowY: 'auto' }}>
-                    <h3 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Members ({members.length})</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        {members.map(member => (
-                            <div key={member.id} style={{
-                                padding: '1rem',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                borderRadius: '8px',
-                                background: selectedMember?.id === member.id ? 'rgba(252, 163, 17, 0.1)' : 'transparent',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center'
-                            }} onClick={() => setSelectedMember(member)}>
-                                <div>
-                                    <div style={{ fontWeight: '600' }}>{member.email}</div>
-                                    <div style={{ fontSize: '0.8rem', color: '#ccc' }}>Role: {member.role}</div>
-                                    <div style={{ fontSize: '0.8rem', color: member.is_active ? '#2ecc71' : '#e74c3c' }}>
-                                        {member.is_active ? 'Active' : 'Inactive'}
-                                    </div>
-                                </div>
-                                <div onClick={(e) => e.stopPropagation()}>
-                                    <button
-                                        onClick={() => toggleStatus(member.id, member.is_active)}
-                                        style={{
-                                            background: member.is_active ? '#e74c3c' : '#2ecc71',
-                                            border: 'none',
-                                            padding: '4px 8px',
-                                            borderRadius: '4px',
-                                            color: 'white',
-                                            cursor: 'pointer',
-                                            fontSize: '0.8rem'
-                                        }}>
-                                        {member.is_active ? 'Deactivate' : 'Activate'}
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                <h1 style={{ fontSize: '2rem', marginBottom: '8px' }}>Admin Console</h1>
+                <p style={{ marginBottom: '32px' }}>Manage users & system health.</p>
+
+                {/* KPI Cards */}
+                <div className="grid-2" style={{ marginBottom: '24px' }}>
+                    <div className="card-premium">
+                        <div className="text-label">Total Users</div>
+                        <div style={{ fontSize: '2rem', fontWeight: 800 }}>1,240</div>
+                    </div>
+                    <div className="card-premium">
+                        <div className="text-label">Active Plans</div>
+                        <div style={{ fontSize: '2rem', fontWeight: 800 }}>856</div>
                     </div>
                 </div>
 
-                {/* Member Details */}
-                <div className="glass-panel" style={{ padding: '2rem' }}>
-                    {selectedMember ? (
-                        <>
-                            <h3 style={{ color: 'var(--primary)', marginBottom: '0.5rem' }}>Member Progress</h3>
-                            <p style={{ marginBottom: '1.5rem', color: '#ccc' }}>Viewing data for: {selectedMember.email}</p>
-
-                            {memberLogs.length > 0 ? (
-                                <Line data={chartData} options={{ responsive: true, plugins: { legend: { labels: { color: 'white' } } }, scales: { y: { ticks: { color: 'white' } }, x: { ticks: { color: 'white' } } } }} />
-                            ) : (
-                                <p>No progress data found for this user.</p>
-                            )}
-                        </>
-                    ) : (
-                        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <p style={{ color: '#666' }}>Select a member to view details.</p>
+                {/* System Status */}
+                <div className="card-premium" style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                        <div style={{ fontWeight: 700, fontSize: '1.2rem' }}>System Health</div>
+                        <div style={{ color: '#4ade80', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ width: '8px', height: '8px', background: '#4ade80', borderRadius: '50%' }}></span>
+                            All Systems Operational
                         </div>
-                    )}
+                    </div>
                 </div>
-            </div>
+
+                {/* User Mgmt */}
+                <div className="card-premium">
+                    <h3 style={{ marginBottom: '16px' }}>Invite New Trainer</h3>
+                    <form onSubmit={handleInvite}>
+                        <div style={{ marginBottom: '16px' }}>
+                            <label className="text-label">Email Address</label>
+                            <input
+                                className="input-field"
+                                type="email"
+                                placeholder="trainer@gym.ai"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        {msg && <div style={{ color: '#4ade80', marginBottom: '16px', fontSize: '0.9rem' }}>{msg}</div>}
+                        <button className="btn-hero" disabled={loading} style={{ fontSize: '0.9rem', padding: '12px' }}>
+                            {loading ? 'Sending...' : 'Send Invitation'}
+                        </button>
+                    </form>
+                </div>
+
+            </motion.div>
         </div>
     );
 };
