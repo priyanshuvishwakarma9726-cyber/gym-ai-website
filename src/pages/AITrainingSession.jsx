@@ -31,23 +31,16 @@ const AITrainingSession = () => {
     }, [step]);
 
     const handleSelect = (key, value) => {
-        // Haptic Feedback
         if (navigator.vibrate) navigator.vibrate(15);
-
         setFormData(prev => ({ ...prev, [key]: value }));
-
-        // Use a small delay for better UX flow
         setTimeout(() => setStep(prev => prev + 1), 250);
     };
 
-    // Auto-trigger API at step 5
     useEffect(() => {
         if (step === 5) {
             const fetchData = async () => {
                 try {
-                    // Min wait time for "Thinking" animation (2.5s)
                     const minWait = new Promise(resolve => setTimeout(resolve, 2500));
-
                     const apiCall = fetch('/api/start-training', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -67,7 +60,6 @@ const AITrainingSession = () => {
         }
     }, [step]);
 
-    // UI Variants for Framer Motion
     const slideVariants = {
         hidden: { opacity: 0, x: 50 },
         visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
@@ -78,14 +70,15 @@ const AITrainingSession = () => {
         <div style={{
             position: 'fixed',
             top: 0, left: 0, width: '100vw', height: '100%',
-            background: 'radial-gradient(circle at 50% 10%, #1a1a1a, #000000)',
-            color: 'white',
+            background: '#050505', /* Fallback */
+            backgroundImage: 'radial-gradient(circle at 50% 10%, #1a1a1a, #000000)',
+            color: '#ffffff', /* ENFORCE WHITE TEXT GLOBALLY */
             zIndex: 9999,
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden'
         }}>
-            {/* Background Particles (CSS only for now for perf) */}
+            {/* Ambient Background Effect */}
             <div className="float-anim" style={{
                 position: 'absolute', top: '-10%', right: '-10%',
                 width: '300px', height: '300px',
@@ -99,7 +92,15 @@ const AITrainingSession = () => {
                 <div style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--primary)', letterSpacing: '1px' }}>GYM.AI</div>
                 <button
                     onClick={() => navigate('/')}
-                    style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.1)', borderRadius: '20px', fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)' }}>
+                    style={{
+                        padding: '8px 16px',
+                        background: 'rgba(255,255,255,0.1)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '20px',
+                        fontSize: '0.8rem',
+                        color: 'rgba(255,255,255,0.9)',
+                        cursor: 'pointer'
+                    }}>
                     Close
                 </button>
             </div>
@@ -120,9 +121,9 @@ const AITrainingSession = () => {
                                 style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--primary)', boxShadow: '0 0 40px rgba(252, 163, 17, 0.4)', marginBottom: '30px' }}
                             />
 
-                            <h1 style={{ fontSize: '2.4rem', marginBottom: '20px', lineHeight: 1.1 }}>AI TRAINER</h1>
-                            <p style={{ fontSize: '1.1rem', minHeight: '80px', maxWidth: '300px' }}>
-                                {typedText}<span className="blink">|</span>
+                            <h1 style={{ fontSize: '2.4rem', marginBottom: '20px', lineHeight: 1.1, color: '#ffffff' }}>AI TRAINER</h1>
+                            <p style={{ fontSize: '1.1rem', minHeight: '80px', maxWidth: '300px', color: 'rgba(255,255,255,0.85)', lineHeight: 1.6 }}>
+                                {typedText}<span className="blink" style={{ color: 'var(--primary)' }}>|</span>
                             </p>
 
                             <motion.button
@@ -130,10 +131,12 @@ const AITrainingSession = () => {
                                 onClick={() => setStep(1)}
                                 style={{
                                     marginTop: '40px',
-                                    background: 'white', color: 'black',
+                                    background: '#ffffff', color: '#000000',
+                                    border: 'none',
                                     padding: '18px 40px', borderRadius: '50px',
                                     fontSize: '1.1rem', fontWeight: 700,
-                                    boxShadow: '0 10px 30px rgba(255,255,255,0.1)'
+                                    boxShadow: '0 10px 30px rgba(255,255,255,0.15)',
+                                    cursor: 'pointer'
                                 }}>
                                 Start Session
                             </motion.button>
@@ -141,6 +144,7 @@ const AITrainingSession = () => {
                     )}
 
                     {/* QUESTIONS */}
+                    {/* Ensuring QuestionView passes text color explicitly */}
                     {step === 1 && <QuestionView key="q1"
                         idx="01" total="04" question="What is your main goal?"
                         options={['Lose Fat', 'Build Muscle', 'Get Stronger', 'Endurance']}
@@ -167,10 +171,10 @@ const AITrainingSession = () => {
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                             style={{ textAlign: 'center', width: '100%' }}>
 
-                            <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>ANALYZING...</h2>
-                            <p style={{ color: '#666', marginBottom: '40px' }}>Calculating metabolic demands & workload.</p>
+                            <h2 style={{ fontSize: '2rem', marginBottom: '10px', color: '#ffffff' }}>ANALYZING...</h2>
+                            <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '40px' }}>Calculating metabolic demands & workload.</p>
 
-                            <div style={{ width: '100%', height: '4px', background: '#222', borderRadius: '2px', overflow: 'hidden' }}>
+                            <div style={{ width: '100%', height: '4px', background: '#333', borderRadius: '2px', overflow: 'hidden' }}>
                                 <motion.div
                                     initial={{ width: '0%' }}
                                     animate={{ width: '100%' }}
@@ -181,7 +185,7 @@ const AITrainingSession = () => {
 
                             <motion.div
                                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
-                                style={{ marginTop: '30px', fontStyle: 'italic', color: '#444' }}>
+                                style={{ marginTop: '30px', fontStyle: 'italic', color: 'rgba(255,255,255,0.6)' }}>
                                 "Consistency is key."
                             </motion.div>
                         </motion.div>
@@ -192,11 +196,11 @@ const AITrainingSession = () => {
                         <motion.div key="result"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            style={{ height: '100%', overflowY: 'auto', paddingBottom: '30px' }}>
+                            style={{ height: '100%', overflowY: 'auto', paddingBottom: '80px' }}> {/* Extra padding for scroll */}
 
                             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
                                 <div style={{ fontSize: '0.8rem', color: 'var(--primary)', letterSpacing: '2px', fontWeight: 700 }}>PLAN READY</div>
-                                <h1 style={{ fontSize: '2.2rem', marginTop: '10px' }}>{result.overview.strategy}</h1>
+                                <h1 style={{ fontSize: '2.2rem', marginTop: '10px', color: '#ffffff' }}>{result.overview.strategy}</h1>
                             </div>
 
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '30px' }}>
@@ -204,7 +208,7 @@ const AITrainingSession = () => {
                                 <MetricCard label="Frequency" value={result.timeline.frequency} delay={0.2} />
                             </div>
 
-                            <motion.h3 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} style={{ marginBottom: '15px' }}>Weekly Split</motion.h3>
+                            <motion.h3 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} style={{ marginBottom: '15px', color: '#ffffff' }}>Weekly Split</motion.h3>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                 {Object.entries(result.schedule).sort().map(([day, details], i) => (
@@ -213,14 +217,21 @@ const AITrainingSession = () => {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.4 + (i * 0.1) }}
-                                        className="glass-panel"
-                                        style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        style={{
+                                            background: 'rgba(255,255,255,0.05)',
+                                            backdropFilter: 'blur(10px)',
+                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            borderRadius: '16px',
+                                            padding: '16px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between'
+                                        }}>
                                         <div>
-                                            <div style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700 }}>{day}</div>
-                                            <div style={{ fontSize: '1rem', fontWeight: 600 }}>{details.focus}</div>
+                                            <div style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, textTransform: 'uppercase' }}>{day}</div>
+                                            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#ffffff' }}>{details.focus}</div>
                                         </div>
-                                        {/* Simple Chevron SVG */}
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                     </motion.div>
                                 ))}
                             </div>
@@ -233,9 +244,11 @@ const AITrainingSession = () => {
                                 <button
                                     onClick={() => navigate('/dashboard')}
                                     style={{
-                                        background: 'var(--primary)', color: 'black',
+                                        background: 'var(--primary)', color: '#000000',
                                         width: '100%', padding: '18px', borderRadius: '16px',
-                                        fontSize: '1.1rem', fontWeight: 700
+                                        fontSize: '1.1rem', fontWeight: 700,
+                                        border: 'none', cursor: 'pointer',
+                                        boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
                                     }}>
                                     Save Plan to Dashboard
                                 </button>
@@ -262,34 +275,39 @@ const AITrainingSession = () => {
     );
 };
 
-// Sub Components
+// Fixed QuestionView with explicit colors
 const QuestionView = ({ idx, total, question, options, onSelect, variants }) => (
     <motion.div
         variants={variants} initial="hidden" animate="visible" exit="exit"
         style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '20px' }}>
-            <h2 style={{ fontSize: '2rem', lineHeight: 1.1 }}>{question}</h2>
-            <span style={{ fontSize: '0.9rem', color: '#666', fontFamily: 'monospace' }}>{idx}/{total}</span>
+            <h2 style={{ fontSize: '2rem', lineHeight: 1.1, color: '#ffffff' }}>{question}</h2>
+            <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', fontFamily: 'monospace' }}>{idx}/{total}</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {options.map((opt, i) => (
                 <motion.button
                     key={opt}
-                    whileTap={{ scale: 0.98, backgroundColor: 'rgba(252, 163, 17, 0.1)' }}
+                    whileTap={{ scale: 0.98, backgroundColor: 'rgba(252, 163, 17, 0.15)' }}
                     onClick={() => onSelect(opt)}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="glass-panel"
                     style={{
+                        background: 'rgba(255,255,255,0.08)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '16px',
                         padding: '20px', fontSize: '1.1rem', fontWeight: 500,
+                        color: '#ffffff', /* Explicit White Text */
                         textAlign: 'left', width: '100%',
+                        cursor: 'pointer',
                         display: 'flex', justifyContent: 'space-between', alignItems: 'center'
                     }}>
                     {opt}
-                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.2)' }} />
+                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)' }} />
                 </motion.button>
             ))}
         </div>
@@ -301,10 +319,16 @@ const MetricCard = ({ label, value, delay }) => (
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay }}
-        className="glass-panel"
-        style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        style={{
+            background: 'rgba(255,255,255,0.05)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: '16px',
+            padding: '16px',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+        }}>
         <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', marginBottom: '5px' }}>{label}</div>
-        <div style={{ fontSize: '1.3rem', fontWeight: 700 }}>{value}</div>
+        <div style={{ fontSize: '1.3rem', fontWeight: 700, color: '#ffffff' }}>{value}</div>
     </motion.div>
 );
 
