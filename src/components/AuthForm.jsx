@@ -39,18 +39,16 @@ const AuthForm = ({ type }) => {
     };
 
     return (
-        <div className="glass-panel" style={{ padding: '2rem', maxWidth: '400px', margin: '4rem auto', color: 'white' }}>
-            <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>{type === 'login' ? 'Login' : 'Sign Up'}</h2>
-            {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
-            {msg && <div style={{ color: 'green', marginBottom: '1rem' }}>{msg}</div>}
+        <div className="glass-card">
+            {error && <div style={{ color: '#ff4444', marginBottom: '1rem', background: 'rgba(255,0,0,0.1)', padding: '10px', borderRadius: '8px' }}>{error}</div>}
+            {msg && <div style={{ color: '#44ff44', marginBottom: '1rem' }}>{msg}</div>}
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <input
                     type="email"
-                    placeholder="Email"
+                    placeholder="Email Address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: 'none', background: 'rgba(255,255,255,0.1)', color: 'white' }}
                 />
                 <input
                     type="password"
@@ -58,10 +56,9 @@ const AuthForm = ({ type }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    style={{ padding: '0.8rem', borderRadius: '4px', border: 'none', background: 'rgba(255,255,255,0.1)', color: 'white' }}
                 />
-                <button type="submit" className="btn-primary" style={{ cursor: 'pointer', marginTop: '1rem' }}>
-                    {type === 'login' ? 'Login' : 'Sign Up'}
+                <button type="submit" className="btn-primary" style={{ marginTop: '1rem' }}>
+                    {type === 'login' ? 'Login' : 'Creae Account'}
                 </button>
             </form>
         </div>

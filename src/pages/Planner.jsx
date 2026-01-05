@@ -40,92 +40,77 @@ const Planner = () => {
     };
 
     return (
-        <div style={{ padding: '4rem', maxWidth: '1000px', margin: '0 auto', color: 'white' }}>
-            <h1>AI Planner</h1>
-            <p style={{ color: '#ccc', marginBottom: '2rem' }}>Generate free customized plans for your fitness journey.</p>
+        <div className="page-container">
+            <h1 style={{ marginBottom: '10px' }}>AI Planner</h1>
+            <p style={{ marginBottom: '30px' }}>Generate free customized plans for your fitness journey.</p>
 
             {/* Tabs */}
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '30px' }}>
                 <button
                     onClick={() => setActiveTab('workout')}
-                    style={{
-                        background: activeTab === 'workout' ? 'var(--primary)' : 'transparent',
-                        color: activeTab === 'workout' ? 'black' : 'white',
-                        border: '1px solid var(--primary)',
-                        padding: '10px 20px',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontWeight: '600'
-                    }}
+                    className={activeTab === 'workout' ? 'btn-primary' : 'btn-secondary'}
                 >
                     Workout Plan
                 </button>
                 <button
                     onClick={() => setActiveTab('diet')}
-                    style={{
-                        background: activeTab === 'diet' ? 'var(--primary)' : 'transparent',
-                        color: activeTab === 'diet' ? 'black' : 'white',
-                        border: '1px solid var(--primary)',
-                        padding: '10px 20px',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontWeight: '600'
-                    }}
+                    className={activeTab === 'diet' ? 'btn-primary' : 'btn-secondary'}
                 >
                     Diet Plan
                 </button>
             </div>
 
             {activeTab === 'workout' ? (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}>
+                <div style={{ display: 'grid', gap: '20px' }}>
                     {/* Form Section */}
-                    <div className="glass-panel" style={{ padding: '2rem' }}>
-                        <h3 style={{ marginBottom: '1.5rem', color: 'var(--primary)' }}>Workout Parameters</h3>
-                        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <div>
-                                <label>Age</label>
-                                <input name="age" type="number" value={formData.age} onChange={handleChange} required
-                                    style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white' }} />
+                    <div className="glass-card">
+                        <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>Workout Parameters</h3>
+                        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                                <div>
+                                    <label style={{ fontSize: '0.9rem', marginBottom: '5px', display: 'block' }}>Age</label>
+                                    <input name="age" type="number" value={formData.age} onChange={handleChange} required />
+                                </div>
+                                <div>
+                                    <label style={{ fontSize: '0.9rem', marginBottom: '5px', display: 'block' }}>Gender</label>
+                                    <select name="gender" value={formData.gender} onChange={handleChange}>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <label>Gender</label>
-                                <select name="gender" value={formData.gender} onChange={handleChange}
-                                    style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: '#333', border: 'none', color: 'white' }}>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                                <div>
+                                    <label style={{ fontSize: '0.9rem', marginBottom: '5px', display: 'block' }}>Weight (kg)</label>
+                                    <input name="weight" type="number" value={formData.weight} onChange={handleChange} required />
+                                </div>
+                                <div>
+                                    <label style={{ fontSize: '0.9rem', marginBottom: '5px', display: 'block' }}>Goal</label>
+                                    <select name="goal" value={formData.goal} onChange={handleChange}>
+                                        <option value="fat loss">Fat Loss</option>
+                                        <option value="muscle gain">Muscle Gain</option>
+                                        <option value="strength">Strength</option>
+                                    </select>
+                                </div>
                             </div>
+
                             <div>
-                                <label>Weight (kg)</label>
-                                <input name="weight" type="number" value={formData.weight} onChange={handleChange} required
-                                    style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white' }} />
-                            </div>
-                            <div>
-                                <label>Goal</label>
-                                <select name="goal" value={formData.goal} onChange={handleChange}
-                                    style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: '#333', border: 'none', color: 'white' }}>
-                                    <option value="fat loss">Fat Loss</option>
-                                    <option value="muscle gain">Muscle Gain</option>
-                                    <option value="strength">Strength</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>Experience</label>
-                                <select name="experience" value={formData.experience} onChange={handleChange}
-                                    style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', background: '#333', border: 'none', color: 'white' }}>
+                                <label style={{ fontSize: '0.9rem', marginBottom: '5px', display: 'block' }}>Experience</label>
+                                <select name="experience" value={formData.experience} onChange={handleChange}>
                                     <option value="beginner">Beginner</option>
                                     <option value="intermediate">Intermediate</option>
                                     <option value="advanced">Advanced</option>
                                 </select>
                             </div>
 
-                            <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: '1rem' }}>
+                            <button type="submit" className="btn-primary" disabled={loading} style={{ marginTop: '10px' }}>
                                 {loading ? 'Generating...' : 'Generate Plan'}
                             </button>
                         </form>
 
                         {/* Tools Section */}
-                        <div style={{ marginTop: '2rem' }}>
+                        <div style={{ marginTop: '30px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px' }}>
                             <BMICalculator />
                         </div>
                     </div>
@@ -133,7 +118,7 @@ const Planner = () => {
                     {/* Results Section */}
                     <div>
                         {plan ? (
-                            <div className="glass-panel" style={{ padding: '2rem', height: '100%', overflowY: 'auto' }}>
+                            <div className="glass-card">
                                 <h3 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Your Custom Plan</h3>
                                 <p style={{ marginBottom: '1.5rem', fontSize: '0.9rem' }}>{plan.summary}</p>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -149,11 +134,7 @@ const Planner = () => {
                                     ))}
                                 </div>
                             </div>
-                        ) : (
-                            <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '16px' }}>
-                                <p style={{ color: '#666' }}>Plan will appear here...</p>
-                            </div>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             ) : (

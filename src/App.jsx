@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -7,117 +8,99 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Planner from './pages/Planner';
-import AdminDashboard from './pages/AdminDashboard';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
-import AITrainingSession from './pages/AITrainingSession';
+import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
+import AITrainingSession from './pages/AITrainingSession';
 import WhatsAppButton from './components/WhatsAppButton';
-import './index.css';
-import heroImage from './assets/hero.png';
+import { motion } from 'framer-motion';
 
-
+// Home Page Component
 const Home = () => {
-  const [backendStatus, setBackendStatus] = useState('Checking...');
-  const [isOnline, setIsOnline] = useState(false);
-
-  useEffect(() => {
-    // Check Vercel Function Health
-    fetch('/api/health')
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'active') {
-          setBackendStatus('System Optimal');
-          setIsOnline(true);
-        } else {
-          setBackendStatus('System Issues');
-        }
-      })
-      .catch(err => setBackendStatus('Backend Offline'));
-  }, []);
-
   const navigate = useNavigate();
 
   return (
-    <main style={{ padding: '4rem', maxWidth: '1200px', margin: '0 auto', marginTop: '6rem' }}>
-      <h1 style={{ fontSize: '5rem', fontWeight: '800', marginBottom: '1.5rem', lineHeight: '1.1' }}>
-        AI FITNESS <br />
-        <span style={{ color: 'var(--primary)' }}>GYM</span>
-      </h1>
-      <p style={{ fontSize: '1.2rem', maxWidth: '600px', marginBottom: '3rem', color: '#ccc' }}>
-        Experience the future of fitness with our AI-powered training programs.
-        Personalized workouts, real-time tracking, and next-level results.
-      </p>
+    <main className="page-container" style={{ paddingBottom: '120px', textAlign: 'center' }}>
 
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <button
-          className="btn-primary"
-          onClick={() => navigate('/start')}
-          style={{
-            boxShadow: '0 0 20px var(--primary)',
-            animation: 'pulse 2s infinite'
-          }}>
-          Start Training
-        </button>
-        <div className="glass-panel" style={{ padding: '0.8rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: isOnline ? '#0f0' : '#f00', display: 'inline-block', boxShadow: isOnline ? '0 0 10px #0f0' : 'none' }}></span>
-          <span style={{ fontSize: '0.9rem', color: '#eee' }}>Status: {backendStatus}</span>
+      {/* Hero Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+        style={{ marginTop: '4rem', marginBottom: '4rem' }}>
+
+        <div style={{
+          display: 'inline-block', padding: '6px 12px', borderRadius: '20px',
+          background: 'rgba(139, 92, 246, 0.1)', color: 'var(--primary)',
+          fontSize: '0.8rem', fontWeight: 600, marginBottom: '20px'
+        }}>
+          ✨ V 2.0 IS LIVE
         </div>
+
+        <h1 style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: 1.1, marginBottom: '24px' }}>
+          TRAIN <span className="text-gradient">SMARTER.</span>
+        </h1>
+
+        <p style={{ fontSize: '1.1rem', maxWidth: '400px', margin: '0 auto 40px auto' }}>
+          The world's first <span style={{ color: 'white' }}>100% Free AI Trainer</span>.
+          Generate professional workout & diet plans in seconds.
+        </p>
+
+        <div style={{ maxWidth: '300px', margin: '0 auto' }}>
+          <button
+            className="btn-primary"
+            onClick={() => navigate('/start')}
+            style={{ padding: '20px', fontSize: '1.2rem', boxShadow: '0 10px 30px rgba(139, 92, 246, 0.3)' }}>
+            Start AI Session
+          </button>
+          <p style={{ fontSize: '0.8rem', marginTop: '16px', color: '#666' }}>No credit card required</p>
+        </div>
+      </motion.div>
+
+      {/* Feature Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', textAlign: 'left' }}>
+        <FeatureCard
+          icon="⚡️" title="Instant Plans"
+          desc="Get a full weekly routine in under 60 seconds based on your goal."
+        />
+        <FeatureCard
+          icon="🥗" title="Smart Diet"
+          desc="Nutrition tailored to your body type and food preferences."
+        />
+        <FeatureCard
+          icon="📈" title="Progress Tracking"
+          desc="Visualize your gains with beautiful automated charts."
+        />
       </div>
+
     </main>
   );
 };
 
+const FeatureCard = ({ icon, title, desc }) => (
+  <div className="glass-card">
+    <div style={{ fontSize: '2rem', marginBottom: '10px' }}>{icon}</div>
+    <h3 style={{ fontSize: '1.2rem', marginBottom: '8px', color: 'white' }}>{title}</h3>
+    <p style={{ fontSize: '0.9rem' }}>{desc}</p>
+  </div>
+);
+
+// Main App Structure
 function App() {
   return (
     <Router>
       <AuthProvider>
         <div style={{ minHeight: '100vh', position: 'relative' }}>
-          {/* Background Image / Overlay */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundImage: `url(${heroImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            zIndex: -1,
-            opacity: 0.6
-          }}></div>
-
-          {/* Gradient Overlay */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(to bottom, rgba(5,5,5,0.2) 0%, rgba(5,5,5,1) 90%)',
-            zIndex: -1
-          }}></div>
-
           <Navbar />
-
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/planner" element={<Planner />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             <Route path="/start" element={<AITrainingSession />} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin" element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            } />
           </Routes>
           <WhatsAppButton />
         </div>
