@@ -25,7 +25,8 @@ const Planner = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/ai/workout-plan', {
+            // Use Vercel Serverless Function endpoint
+            const res = await fetch('/api/workout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

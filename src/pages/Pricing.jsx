@@ -21,8 +21,8 @@ const Pricing = () => {
         setLoading(true);
 
         try {
-            // 1. Create Order on Backend
-            const res = await fetch('http://localhost:5000/create-order', {
+            // 1. Create Order on Backend (Serverless)
+            const res = await fetch('/api/create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount: plan.price })
@@ -38,8 +38,8 @@ const Pricing = () => {
                 description: plan.name,
                 order_id: order.id,
                 handler: async function (response) {
-                    // 3. Verify Payment
-                    const verifyRes = await fetch('http://localhost:5000/verify-payment', {
+                    // 3. Verify Payment (Serverless)
+                    const verifyRes = await fetch('/api/verify-payment', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(response)

@@ -55,7 +55,17 @@ export const AuthProvider = ({ children }) => {
 
 
     const signUp = async (email, password) => {
-        return supabase.auth.signUp({ email, password });
+        // We rely on the project settings in Supabase Dashboard -> Auth -> Providers -> Email -> Confirm email (OFF)
+        // But we can also set email_confirm: false in metadata if needed, though strictly controlled by server settings.
+        return supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    display_name: email.split('@')[0],
+                }
+            }
+        });
     };
 
     const signIn = async (email, password) => {

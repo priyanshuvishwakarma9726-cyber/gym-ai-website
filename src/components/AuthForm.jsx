@@ -23,8 +23,13 @@ const AuthForm = ({ type }) => {
 
             if (error) throw error;
 
-            if (type === 'signup') {
-                setMsg('Signup successful! Check your email for verification.');
+            // If signup is successful and email verification is disabled,
+            // Supabase returns a session immediately. We can redirect.
+            if (data.session) {
+                navigate('/dashboard');
+            } else if (type === 'signup' && !data.session) {
+                // Edge case: Email verification might still be enabled in settings
+                setMsg('Signup successful! Please check if you need to verify your email.');
             } else {
                 navigate('/dashboard');
             }

@@ -19,12 +19,21 @@ import heroImage from './assets/hero.png';
 
 const Home = () => {
   const [backendStatus, setBackendStatus] = useState('Checking...');
+  const [isOnline, setIsOnline] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/')
-      .then(res => res.text())
-      .then(data => setBackendStatus(data))
-      .catch(err => setBackendStatus('Backend Invalid or Offline'));
+    // Check Vercel Function Health
+    fetch('/api/health')
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'active') {
+          setBackendStatus('System Optimal');
+          setIsOnline(true);
+        } else {
+          setBackendStatus('System Issues');
+        }
+      })
+      .catch(err => setBackendStatus('Backend Offline'));
   }, []);
 
   return (
@@ -41,8 +50,8 @@ const Home = () => {
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <button className="btn-primary">Start Training</button>
         <div className="glass-panel" style={{ padding: '0.8rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: backendStatus.includes('running') ? '#0f0' : '#f00', display: 'inline-block' }}></span>
-          <span style={{ fontSize: '0.9rem', color: '#eee' }}>Server Status: {backendStatus}</span>
+          <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: isOnline ? '#0f0' : '#f00', display: 'inline-block', boxShadow: isOnline ? '0 0 10px #0f0' : 'none' }}></span>
+          <span style={{ fontSize: '0.9rem', color: '#eee' }}>Status: {backendStatus}</span>
         </div>
       </div>
     </main>
