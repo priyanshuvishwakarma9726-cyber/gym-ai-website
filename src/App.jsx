@@ -1,111 +1,43 @@
 
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import Navbar from './components/Navbar';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { GameProvider } from './context/GameContext';
 import ProtectedRoute from './components/ProtectedRoute';
+
+// Pages
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
-import Planner from './pages/Planner';
-import Pricing from './pages/Pricing';
-import Contact from './pages/Contact';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminRoute from './components/AdminRoute';
-import AITrainingSession from './pages/AITrainingSession';
-import WhatsAppButton from './components/WhatsAppButton';
-import MobileNav from './components/MobileNav';
-import { motion } from 'framer-motion';
-
-// Home Page Component
-const Home = () => {
-  const navigate = useNavigate();
-
-  return (
-    <main className="app-shell" style={{ paddingBottom: '120px', textAlign: 'center' }}>
-
-      {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-        style={{ marginTop: '4rem', marginBottom: '4rem', padding: '0 20px' }}>
-
-        <div style={{
-          display: 'inline-block', padding: '6px 12px', borderRadius: '20px',
-          background: 'rgba(124, 58, 237, 0.15)', color: 'var(--primary-light)',
-          fontSize: '0.8rem', fontWeight: 600, marginBottom: '20px', border: '1px solid rgba(124, 58, 237, 0.3)'
-        }}>
-          V 2.0 LIVE
-        </div>
-
-        <h1 style={{ fontSize: 'clamp(3rem, 12vw, 4.5rem)', lineHeight: 1.1, marginBottom: '24px', letterSpacing: '-2px' }}>
-          TRAIN <span className="text-gradient">SMARTER.</span>
-        </h1>
-
-        <p style={{ fontSize: '1.1rem', maxWidth: '400px', margin: '0 auto 40px auto', color: 'var(--text-secondary)' }}>
-          The world's first <span style={{ color: 'white' }}>100% Free AI Trainer</span>.
-          Generate professional workout & diet plans in seconds.
-        </p>
-
-        <div style={{ maxWidth: '300px', margin: '0 auto' }}>
-          <button
-            className="btn-hero"
-            onClick={() => navigate('/start')}
-            style={{ padding: '20px', fontSize: '1.2rem' }}>
-            Start AI Session
-          </button>
-          <p style={{ fontSize: '0.8rem', marginTop: '16px', color: 'var(--text-dim)' }}>No credit card required</p>
-        </div>
-      </motion.div>
-
-      {/* Feature Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', textAlign: 'left', padding: '0 20px' }}>
-        <FeatureCard
-          icon="⚡️" title="Instant Plans"
-          desc="Get a full weekly routine in under 60 seconds based on your goal."
-        />
-        <FeatureCard
-          icon="🥗" title="Smart Diet"
-          desc="Nutrition tailored to your body type and food preferences."
-        />
-        <FeatureCard
-          icon="📈" title="Progress Tracking"
-          desc="Visualize your gains with beautiful automated charts."
-        />
-      </div>
-
-    </main>
-  );
-};
-
-const FeatureCard = ({ icon, title, desc }) => (
-  <div className="card-premium">
-    <div style={{ fontSize: '2rem', marginBottom: '16px' }}>{icon}</div>
-    <h3 style={{ fontSize: '1.3rem', marginBottom: '8px', color: 'white' }}>{title}</h3>
-    <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>{desc}</p>
-  </div>
-);
-
-// Main App Structure
-import Workout from './pages/Workout';
-import Challenges from './pages/Challenges';
-import Profile from './pages/Profile';
+import AIWorkout from './pages/AIWorkout';
+import AIDiet from './pages/AIDiet';
 import Sidebar from './components/Sidebar';
-import { GameProvider } from './context/GameContext';
-import { useAuth } from './context/AuthContext';
 
-// ... (keep Home component same)
-
-// Helper Component to handle conditional Sidebar and Layout
+// Layout Component (SaaS Structure)
 const Layout = ({ children }) => {
   const { user } = useAuth();
+
+  if (!user) {
+    // Public Layout (Simpler, Centered)
+    return <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>{children}</div>;
+  }
+
+  // Private SaaS Layout
   return (
-    <div className="dashboard-layout">
-      {user && <Sidebar />}
-      <div style={{ flex: 1, marginLeft: user ? 'var(--sidebar-width)' : 0 }}>
+    <div className="app-layout">
+      <Sidebar />
+      <div className="main-content">
         {children}
       </div>
     </div>
   );
+};
+
+// Home Redirect
+const HomeRedirect = () => {
+  const { user } = useAuth();
+  if (user) return <Navigate to="/dashboard" />;
+  return <Navigate to="/login" />;
 };
 
 function App() {
@@ -115,18 +47,21 @@ function App() {
         <GameProvider>
           <Layout>
             <Routes>
-              <Route path="/" element={<Home />} />
+              {/* Public Routes */}
+              <Route path="/" element={<HomeRedirect />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/dashboard" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Dashboard /></div></ProtectedRoute>} />
-              <Route path="/planner" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Planner /></div></ProtectedRoute>} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/admin" element={<AdminRoute><div className="main-content" style={{ margin: 0 }}><AdminDashboard /></div></AdminRoute>} />
-              <Route path="/start" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><AITrainingSession /></div></ProtectedRoute>} />
-              <Route path="/workout" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Workout /></div></ProtectedRoute>} />
-              <Route path="/challenges" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Challenges /></div></ProtectedRoute>} />
-              <Route path="/profile" element={<ProtectedRoute><div className="main-content" style={{ margin: 0 }}><Profile /></div></ProtectedRoute>} />
+
+              {/* Protected SaaS App Routes */}
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/ai-workout" element={<ProtectedRoute><AIWorkout /></ProtectedRoute>} />
+              <Route path="/ai-diet" element={<ProtectedRoute><AIDiet /></ProtectedRoute>} />
+
+              {/* Placeholders for future phases */}
+              <Route path="/progress" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/insights" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             </Routes>
           </Layout>
         </GameProvider>

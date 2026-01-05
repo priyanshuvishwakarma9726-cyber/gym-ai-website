@@ -1,82 +1,78 @@
 
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = () => {
     const { signOut } = useAuth();
     const navigate = useNavigate();
-
-    const handleLogout = async () => {
-        await signOut();
-        navigate('/login');
-    };
+    const location = useLocation();
 
     return (
         <aside style={{
-            width: 'var(--sidebar-width)',
-            height: '100vh',
-            background: 'var(--bg-sidebar)',
-            color: 'var(--text-sidebar)',
-            display: 'flex',
-            flexDirection: 'column',
-            position: 'fixed',
-            left: 0, top: 0,
-            borderRight: '1px solid #334155'
+            width: 'var(--sidebar-w)',
+            background: 'var(--c-sidebar)',
+            display: 'flex', flexDirection: 'column',
+            borderRight: '1px solid var(--c-sidebar)',
+            color: '#94a3b8'
         }}>
             {/* Brand */}
-            <div style={{ height: '64px', display: 'flex', alignItems: 'center', padding: '0 24px', borderBottom: '1px solid #334155' }}>
-                <div style={{ width: '24px', height: '24px', background: 'var(--primary)', borderRadius: '4px', marginRight: '12px' }}></div>
-                <span style={{ fontSize: '1.2rem', fontWeight: 700, color: 'white', letterSpacing: '0.5px' }}>GYM.AI</span>
+            <div style={{ height: '60px', display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ width: '20px', height: '20px', background: 'var(--c-accent)', borderRadius: '4px', marginRight: '10px' }} />
+                <span style={{ fontSize: '16px', fontWeight: 700, color: 'white', letterSpacing: '0.5px' }}>GYM.OS</span>
             </div>
 
-            {/* Menu */}
-            <nav style={{ flex: 1, padding: '24px 12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <MenuItem to="/dashboard" icon="📊" label="Dashboard" />
-                <MenuItem to="/start" icon="⚡️" label="Start Training" />
-                <MenuItem to="/planner" icon="📝" label="Diet Planner" />
-                <MenuItem to="/workout" icon="🏋️" label="Live Session" />
-                <MenuItem to="/challenges" icon="🏆" label="Challenges" />
-                <MenuItem to="/profile" icon="👤" label="Members / Profile" />
+            {/* Nav */}
+            <div style={{ flex: 1, padding: '20px 0', overflowY: 'auto' }}>
+                <SectionLabel>Core Modules</SectionLabel>
+                <NavItem to="/dashboard" icon="●" label="Overview" active={location.pathname === '/dashboard'} />
+                <NavItem to="/ai-workout" icon="●" label="AI Workout" active={location.pathname === '/ai-workout'} />
+                <NavItem to="/ai-diet" icon="●" label="AI Diet" active={location.pathname === '/ai-diet'} />
 
-                <div style={{ marginTop: '24px', paddingLeft: '12px', fontSize: '0.75rem', textTransform: 'uppercase', color: '#64748b', fontWeight: 600, letterSpacing: '1px' }}>System</div>
-                <MenuItem to="/reports" icon="📈" label="Reports" />
-                <MenuItem to="/admin" icon="⚙️" label="Settings" />
-            </nav>
+                <SectionLabel>Analytics</SectionLabel>
+                <NavItem to="/progress" icon="●" label="Progress" active={location.pathname === '/progress'} />
+                <NavItem to="/insights" icon="●" label="AI Insights" active={location.pathname === '/insights'} />
 
-            {/* Footer / User */}
-            <div style={{ padding: '24px', borderTop: '1px solid #334155' }}>
+                <SectionLabel>System</SectionLabel>
+                <NavItem to="/profile" icon="●" label="Profile" active={location.pathname === '/profile'} />
+                <NavItem to="/settings" icon="●" label="Settings" active={location.pathname === '/settings'} />
+            </div>
+
+            {/* Footer */}
+            <div style={{ padding: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
                 <button
-                    onClick={handleLogout}
+                    onClick={() => { signOut(); navigate('/login'); }}
                     style={{
-                        width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-                        background: 'rgba(255,255,255,0.05)', border: 'none', color: '#cbd5e1',
-                        padding: '12px', borderRadius: '6px', cursor: 'pointer', transition: '0.2s'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                >
-                    <span>🚪</span> Logout
+                        width: '100%', background: 'rgba(255,255,255,0.05)', border: 'none',
+                        color: 'white', padding: '10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px'
+                    }}>
+                    Sign Out
                 </button>
             </div>
         </aside>
     );
 };
 
-const MenuItem = ({ to, icon, label }) => (
-    <NavLink
-        to={to}
-        style={({ isActive }) => ({
+const SectionLabel = ({ children }) => (
+    <div style={{ padding: '0 20px', margin: '16px 0 8px 0', fontSize: '11px', textTransform: 'uppercase', color: '#475569', fontWeight: 700, letterSpacing: '1px' }}>
+        {children}
+    </div>
+);
+
+const NavItem = ({ to, icon, label, active }) => (
+    <NavLink to={to} style={{ textDecoration: 'none' }}>
+        <div style={{
+            padding: '10px 20px',
             display: 'flex', alignItems: 'center', gap: '12px',
-            padding: '12px 16px', borderRadius: '6px',
-            textDecoration: 'none',
-            color: isActive ? 'white' : 'var(--text-sidebar)',
-            background: isActive ? 'var(--primary)' : 'transparent',
-            fontSize: '0.95rem', fontWeight: 500,
+            color: active ? 'white' : '#94a3b8',
+            background: active ? 'rgba(255,255,255,0.08)' : 'transparent',
+            borderLeft: active ? '3px solid var(--c-accent)' : '3px solid transparent',
+            fontSize: '13px', fontWeight: 500,
             transition: 'all 0.2s'
-        })}
-    >
-        <span>{icon}</span> {label}
+        }}>
+            <span style={{ fontSize: '10px', color: active ? 'var(--c-accent)' : '#475569' }}>{icon}</span>
+            {label}
+        </div>
     </NavLink>
 );
 
