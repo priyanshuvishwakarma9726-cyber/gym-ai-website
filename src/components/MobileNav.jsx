@@ -8,9 +8,11 @@ const MobileNav = () => {
     const location = useLocation();
 
     const tabs = [
-        { id: 'home', icon: '🏠', label: 'Home', path: '/' },
+        { id: 'home', icon: '🏠', label: 'Home', path: '/dashboard' },
+        { id: 'challenges', icon: '⚔️', label: 'Quest', path: '/challenges' },
         { id: 'start', icon: '⚡️', label: 'Train', path: '/start', primary: true },
-        { id: 'dashboard', icon: '📊', label: 'Progress', path: '/dashboard' },
+        { id: 'workout', icon: '🏋️', label: 'Gym', path: '/workout' },
+        { id: 'profile', icon: '👤', label: 'Profile', path: '/profile' },
     ];
 
     return (

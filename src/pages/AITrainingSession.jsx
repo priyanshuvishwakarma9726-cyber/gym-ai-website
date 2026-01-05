@@ -196,7 +196,7 @@ const AITrainingSession = () => {
                         <motion.div key="result"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            style={{ height: '100%', overflowY: 'auto', paddingBottom: '80px' }}> {/* Extra padding for scroll */}
+                            style={{ height: '100%', overflowY: 'auto', paddingBottom: '120px' }}> {/* Extra padding for scroll */}
 
                             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
                                 <div style={{ fontSize: '0.8rem', color: 'var(--primary)', letterSpacing: '2px', fontWeight: 700 }}>PLAN READY</div>
@@ -240,18 +240,44 @@ const AITrainingSession = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 1 }}
-                                style={{ marginTop: '40px', textAlign: 'center' }}>
+                                style={{ marginTop: '40px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+                                <button
+                                    onClick={() => navigate('/workout')}
+                                    style={{
+                                        background: 'linear-gradient(135deg, var(--primary), var(--accent))', color: '#ffffff',
+                                        width: '100%', padding: '18px', borderRadius: '16px',
+                                        fontSize: '1.2rem', fontWeight: 800,
+                                        border: 'none', cursor: 'pointer',
+                                        boxShadow: '0 4px 20px rgba(124, 58, 237, 0.5)'
+                                    }}>
+                                    START DAY 1
+                                </button>
+
                                 <button
                                     onClick={() => navigate('/dashboard')}
                                     style={{
-                                        background: 'var(--primary)', color: '#000000',
-                                        width: '100%', padding: '18px', borderRadius: '16px',
-                                        fontSize: '1.1rem', fontWeight: 700,
-                                        border: 'none', cursor: 'pointer',
-                                        boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
+                                        background: 'rgba(255,255,255,0.1)', color: '#ffffff',
+                                        width: '100%', padding: '16px', borderRadius: '16px',
+                                        fontSize: '1rem', fontWeight: 600,
+                                        border: '1px solid rgba(255,255,255,0.2)', cursor: 'pointer'
                                     }}>
                                     Save Plan to Dashboard
                                 </button>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                    <button
+                                        onClick={() => { alert('Plan link copied!'); if (navigator.vibrate) navigator.vibrate(50); }}
+                                        style={{ background: 'transparent', border: '1px solid var(--text-secondary)', padding: '12px', borderRadius: '12px', color: 'var(--text-secondary)' }}>
+                                        Share
+                                    </button>
+                                    <button
+                                        onClick={() => setStep(0)}
+                                        style={{ background: 'transparent', border: '1px solid var(--text-secondary)', padding: '12px', borderRadius: '12px', color: 'var(--text-secondary)' }}>
+                                        Restart
+                                    </button>
+                                </div>
+
                             </motion.div>
                         </motion.div>
                     )}

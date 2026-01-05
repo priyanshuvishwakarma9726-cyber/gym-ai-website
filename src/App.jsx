@@ -86,26 +86,38 @@ const FeatureCard = ({ icon, title, desc }) => (
 );
 
 // Main App Structure
+import Workout from './pages/Workout';
+import Challenges from './pages/Challenges';
+import Profile from './pages/Profile';
+import { GameProvider } from './context/GameContext';
+
+// ... (keep Home component same)
+
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <div style={{ minHeight: '100vh', position: 'relative' }}>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/planner" element={<Planner />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-            <Route path="/start" element={<AITrainingSession />} />
-          </Routes>
-          <MobileNav />
-          <WhatsAppButton />
-        </div>
+        <GameProvider>
+          <div style={{ minHeight: '100vh', position: 'relative' }}>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/planner" element={<Planner />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+              <Route path="/start" element={<AITrainingSession />} />
+              <Route path="/workout" element={<Workout />} />
+              <Route path="/challenges" element={<Challenges />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+            <MobileNav />
+            <WhatsAppButton />
+          </div>
+        </GameProvider>
       </AuthProvider>
     </Router>
   );
