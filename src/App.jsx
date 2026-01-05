@@ -14,6 +14,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
 import AITrainingSession from './pages/AITrainingSession';
 import WhatsAppButton from './components/WhatsAppButton';
+import MobileNav from './components/MobileNav';
 import { motion } from 'framer-motion';
 
 // Home Page Component
@@ -102,6 +103,7 @@ function App() {
             <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             <Route path="/start" element={<AITrainingSession />} />
           </Routes>
+          <MobileNav />
           <WhatsAppButton />
         </div>
       </AuthProvider>

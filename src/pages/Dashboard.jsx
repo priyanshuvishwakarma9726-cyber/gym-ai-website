@@ -19,17 +19,21 @@ const Dashboard = () => {
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(45deg, var(--primary), var(--accent))' }}></div>
             </header>
 
-            {/* Quick Actions */}
+            {/* Daily Motivation (Engagement Phase 1) */}
+            <div className="card-premium" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(0,0,0,0))' }}>
+                <div style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', color: '#a78bfa' }}>Daily Focus</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 600, fontStyle: 'italic' }}>"Discipline is doing what needs to be done, even if you don't want to do it."</div>
+            </div>
+
+            {/* Streak & Quick Actions */}
             <div className="grid-2" style={{ marginBottom: '32px' }}>
-                <div className="card-premium" onClick={() => navigate('/start')} style={{ cursor: 'pointer', border: '1px solid var(--primary)', background: 'rgba(124, 58, 237, 0.1)' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '12px' }}>💪</div>
-                    <div style={{ fontWeight: 700, color: 'white', marginBottom: '4px' }}>New Workout</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 600 }}>Generate →</div>
+                <div className="card-premium" style={{ border: '1px solid #4ade80' }}>
+                    <div style={{ fontSize: '2rem', fontWeight: 800 }}>3 <span style={{ fontSize: '1rem', fontWeight: 500 }}>Days</span></div>
+                    <div style={{ fontSize: '0.85rem', color: '#4ade80' }}>🔥 Current Streak</div>
                 </div>
-                <div className="card-premium" onClick={() => navigate('/planner')} style={{ cursor: 'pointer' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🍏</div>
-                    <div style={{ fontWeight: 700, color: 'white', marginBottom: '4px' }}>New Diet</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Create →</div>
+                <div className="card-premium" onClick={() => navigate('/start')} style={{ cursor: 'pointer', border: '1px solid var(--primary)', background: 'rgba(124, 58, 237, 0.1)' }}>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '4px' }}>Start</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 600 }}>Quick Workout →</div>
                 </div>
             </div>
 
